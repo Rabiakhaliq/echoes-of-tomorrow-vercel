@@ -1,5 +1,9 @@
 {
   "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/api/cron/check-letters", "destination": "/api/cron/check-letters" },
+    { "source": "/api/(.*)", "destination": "/api" }
+  ],
   "crons": [
     {
       "path": "/api/cron/check-letters",
