@@ -1,0 +1,9 @@
+{
+  "outputDirectory": "dist",
+  "crons": [
+    {
+      "path": "/api/cron/check-letters",
+      "schedule": "0 8 * * *"
+    }
+  ]
+}

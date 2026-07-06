@@ -1,0 +1,46 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  /* deep purple night theme */
+  --color-void: #180B2E;        /* page background — deep purple-black */
+  --color-void-light: #2B1650;  /* card background — rich purple */
+  --color-indigo: #8B5CF6;      /* vivid violet — primary accent */
+  --color-indigo-soft: #A78BFA; /* lighter violet — secondary accent */
+  --color-aqua: #64DFDF;        /* teal — pops against the purple */
+  --color-gold: #E8B94D;        /* warm gold — wax seal / highlight only */
+  --color-parchment: #F3EFE6;   /* off-white — main text color */
+
+  --font-display: 'Fraunces', serif;
+  --font-sans: 'Outfit', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-void);
+  color: var(--color-parchment);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-gold);
+  color: var(--color-void);
+}
+
+/* thin scrollbar to match the theme */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--color-void); }
+::-webkit-scrollbar-thumb { background: var(--color-indigo); border-radius: 8px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
