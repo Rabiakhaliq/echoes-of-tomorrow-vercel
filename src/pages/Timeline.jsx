@@ -4,6 +4,7 @@ import { Plus } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../api/client';
 import ConstellationTimeline from '../components/ConstellationTimeline';
+import LoadingScreen from "../components/LoadingScreen";
 
 export default function Timeline() {
   const { token } = useAuth();
@@ -48,25 +49,34 @@ export default function Timeline() {
       setSubmitting(false);
     }
   };
-
+if (loading) {
   return (
-    <div className="mx-auto max-w-3xl px-6 py-14">
+    <LoadingScreen
+    background="timeline-bg"
+      title="Building Your Timeline..."
+      subtitle="Every memory has its own place in time."
+    />
+  );
+}
+  return (
+    <div className="page-background timeline-bg page-enter">
+      <div className="mx-auto max-w-3xl px-6 py-14">
       <div className="flex items-start justify-between">
         <div>
           <motion.h1
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="font-display text-3xl text-parchment"
+            className="font-display text-5xl text-white"
           >
             Your memory timeline
           </motion.h1>
-          <p className="mt-2 text-sm text-parchment/50">
+          <p className="mt-3 text-lg text-[#F7E9D0]">
             Every milestone, strung together like stars.
           </p>
         </div>
         <button
           onClick={() => setShowForm((s) => !s)}
-          className="flex items-center gap-1.5 rounded-full border border-white/10 px-4 py-2 text-sm text-parchment/70 hover:border-white/25"
+          className="flex items-center gap-2 rounded-full border border-[#D4AF37]/40 bg-[#7B5A45]/70 px-5 py-2 text-[#F7E9D0] hover:bg-[#8B5E3C]/80 transition-all"
         >
           <Plus size={14} />
           Add
@@ -78,32 +88,32 @@ export default function Timeline() {
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           onSubmit={handleAdd}
-          className="mt-6 space-y-3 rounded-2xl border border-white/10 bg-void-light/50 p-5"
+          className="mt-6 space-y-4 rounded-3xl border border-[#D4AF37]/30 bg-[#7B5A45]/80 p-6 backdrop-blur-md"
         >
           <input
             placeholder="Title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
-            className="w-full rounded-lg border border-white/10 bg-void/60 px-3 py-2 text-sm text-parchment focus:border-aqua/50 focus:outline-none"
+            className="w-full rounded-xl border border-[#D4AF37]/30 bg-[#5E4634]/60 px-4 py-3 text-[#F7E9D0] placeholder:text-[#D8C3A5] focus:border-[#D4AF37] focus:outline-none"
           />
           <input
             placeholder="Description (optional)"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full rounded-lg border border-white/10 bg-void/60 px-3 py-2 text-sm text-parchment focus:border-aqua/50 focus:outline-none"
+            className="w-full rounded-lg border border-[#D4AF37]/30 bg-[#5E4634]/60 px-4 py-3 text-[#F7E9D0] placeholder:text-[#D8C3A5] focus:border-[#D4AF37] focus:outline-none"
           />
           <input
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
             required
-            className="w-full rounded-lg border border-white/10 bg-void/60 px-3 py-2 text-sm text-parchment focus:border-aqua/50 focus:outline-none"
+            className="w-full rounded-lg border border-[#D4AF37]/30 bg-[#5E4634]/60 px-4 py-3 text-[#F7E9D0] placeholder:text-[#D8C3A5] focus:border-[#D4AF37] focus:outline-none"
           />
           <button
             type="submit"
             disabled={submitting}
-            className="rounded-full bg-gradient-to-r from-indigo to-aqua px-5 py-2 text-sm font-medium text-void disabled:opacity-50"
+            className="rounded-full bg-gradient-to-r from-[#D4AF37] to-[#8B5E3C] px-6 py-3 font-semibold text-white hover:scale-105 transition-all disabled:opacity-50"
           >
             {submitting ? 'Adding...' : 'Add to timeline'}
           </button>
@@ -111,16 +121,18 @@ export default function Timeline() {
       )}
 
       <div className="mt-12">
-        {loading ? (
-          <p className="text-parchment/40">Loading...</p>
-        ) : error ? (
-          <p className="text-red-400">{error}</p>
-        ) : events.length === 0 ? (
-          <p className="text-parchment/40">No events yet — add your first milestone.</p>
-        ) : (
-          <ConstellationTimeline events={events} />
-        )}
+    
+ {error ? (
+  <p className="text-red-400">{error}</p>
+) : events.length === 0 ? (
+  <p className="text-xl text-[#F7E9D0]">
+    No events yet — add your first milestone.
+  </p>
+) : (
+  <ConstellationTimeline events={events} />
+)}
       </div>
+    </div>
     </div>
   );
 }

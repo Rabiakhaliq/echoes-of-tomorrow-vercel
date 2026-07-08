@@ -1,66 +1,219 @@
-import { NavLink, useNavigate } from 'react-router-dom';
-import { Feather, LogOut } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { NavLink, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import {
+  Feather,
+  LogOut,
+  Clock3,
+  Menu,
+  X,
+} from "lucide-react";
+import { useState } from "react";
+import { useAuth } from "../context/AuthContext";
 
 const links = [
-  { to: '/dashboard', label: 'Dashboard' },
-  { to: '/write', label: 'Write a Letter' },
-  { to: '/timeline', label: 'Timeline' },
-  { to: '/gallery', label: 'Gallery' },
+  { to: "/dashboard", label: "Dashboard" },
+  { to: "/write", label: "Write Letter" },
+  { to: "/timeline", label: "Timeline" },
+  { to: "/gallery", label: "Gallery" },
 ];
 
 export default function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
+  const [open, setOpen] = useState(false);
+
   const handleLogout = () => {
     logout();
-    navigate('/');
+    navigate("/");
   };
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-void/70 backdrop-blur-md">
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <NavLink to="/" className="flex items-center gap-2 font-display text-lg tracking-wide text-parchment">
-          <Feather size={18} className="text-gold" strokeWidth={1.5} />
-          Echoes of Tomorrow
+    <header className="sticky top-0 z-50 px-4 py-4">
+
+      <motion.nav
+        initial={{ y: -40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="mx-auto flex max-w-7xl items-center justify-between rounded-2xl border border-[#D4AF37]/25 bg-[#6F4E37]/70 px-6 py-4 shadow-2xl backdrop-blur-xl"
+      >
+
+        {/* Logo */}
+
+        <NavLink
+          to="/"
+          className="flex items-center gap-3"
+        >
+
+          <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#8B5E3C] shadow-lg">
+
+            <Clock3
+              size={22}
+              className="text-[#F7E9D0]"
+            />
+
+          </div>
+
+          <div>
+
+            <p className="font-display text-2xl text-white">
+
+              Echoes of Tomorrow
+
+            </p>
+
+            <p className="text-xs tracking-[0.25em] uppercase text-[#E7C88A]">
+
+              Time Capsule
+
+            </p>
+
+          </div>
+
         </NavLink>
 
-        {user ? (
-          <div className="hidden items-center gap-8 text-sm font-medium text-parchment/70 sm:flex">
-            {links.map((l) => (
+        {/* Desktop Links */}
+
+        {user && (
+
+          <div className="hidden items-center gap-2 lg:flex">
+
+            {links.map((link) => (
+
               <NavLink
-                key={l.to}
-                to={l.to}
+                key={link.to}
+                to={link.to}
                 className={({ isActive }) =>
-                  `transition-colors hover:text-aqua ${isActive ? 'text-aqua' : ''}`
+                  `rounded-xl px-5 py-2 transition-all duration-300 ${
+                    isActive
+                      ? "bg-[#D4AF37] text-black shadow-lg"
+                      : "text-[#F7E9D0] hover:bg-white/10"
+                  }`
                 }
               >
-                {l.label}
+
+                {link.label}
+
               </NavLink>
+
             ))}
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-1.5 text-parchment/50 transition-colors hover:text-parchment"
-            >
-              <LogOut size={14} />
-              Log out
-            </button>
+
           </div>
-        ) : (
-          <div className="flex items-center gap-4 text-sm font-medium">
-            <NavLink to="/login" className="text-parchment/70 hover:text-aqua">
-              Log in
-            </NavLink>
-            <NavLink
-              to="/register"
-              className="rounded-full bg-gradient-to-r from-indigo to-aqua px-4 py-2 text-void"
-            >
-              Sign up
-            </NavLink>
-          </div>
+
         )}
-      </nav>
+
+        {/* Right Side */}
+
+        <div className="flex items-center gap-3">
+
+          {user ? (
+
+            <>
+              <div className="hidden text-right lg:block">
+
+                <p className="text-sm text-[#E7C88A]">
+
+                  Welcome
+
+                </p>
+
+                <p className="font-semibold text-white">
+
+                  {user.name}
+
+                </p>
+
+              </div>
+
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2 rounded-xl border border-[#D4AF37]/30 bg-white/10 px-4 py-2 text-[#F7E9D0] transition hover:bg-red-500/20 hover:text-white"
+              >
+
+                <LogOut size={17} />
+
+                Logout
+
+              </button>
+
+              <button
+                className="lg:hidden"
+                onClick={() => setOpen(!open)}
+              >
+
+                {open ? (
+                  <X className="text-white" />
+                ) : (
+                  <Menu className="text-white" />
+                )}
+
+              </button>
+            </>
+
+          ) : (
+
+            <div className="flex items-center gap-3">
+
+              <NavLink
+                to="/login"
+                className="rounded-xl border border-[#D4AF37]/30 px-5 py-2 text-[#F7E9D0] transition hover:bg-white/10"
+              >
+
+                Login
+
+              </NavLink>
+
+              <NavLink
+                to="/register"
+                className="primary-button"
+              >
+
+                Begin Journey
+
+              </NavLink>
+
+            </div>
+
+          )}
+
+        </div>
+
+      </motion.nav>
+
+      {/* Mobile Menu */}
+
+      {user && open && (
+
+        <motion.div
+          initial={{ opacity: 0, y: -15 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mx-auto mt-3 flex max-w-7xl flex-col gap-2 rounded-2xl border border-[#D4AF37]/25 bg-[#6F4E37]/90 p-4 backdrop-blur-xl lg:hidden"
+        >
+
+          {links.map((link) => (
+
+            <NavLink
+              key={link.to}
+              to={link.to}
+              onClick={() => setOpen(false)}
+              className={({ isActive }) =>
+                `rounded-xl px-4 py-3 ${
+                  isActive
+                    ? "bg-[#D4AF37] text-black"
+                    : "text-[#F7E9D0]"
+                }`
+              }
+            >
+
+              {link.label}
+
+            </NavLink>
+
+          ))}
+
+        </motion.div>
+
+      )}
+
     </header>
   );
 }

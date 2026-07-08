@@ -1,75 +1,238 @@
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { X } from 'lucide-react';
-import { galleryMemories, moodEmojiScale } from '../data/mockData';
-
-// NOTE: still using mock data here — the backend doesn't have a dedicated
-// media/gallery collection yet (media currently lives embedded inside Letter
-// documents). Once Cloudinary upload is added, swap this for a real fetch,
-// most likely pulling from GET /api/letters and flattening the media arrays.
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { CalendarDays, Lock, Unlock, ScrollText } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+import { api } from "../api/client";
 
 export default function Gallery() {
+  const { token } = useAuth();
+
+  const [letters, setLetters] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(null);
+  useEffect(() => {
+  if (!token) return;
 
+  api.getLetters(token)
+    .then((data) => setLetters(data))
+    .catch(console.error)
+    .finally(() => setLoading(false));
+  }, [token]);
+
+  if (loading) {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-14">
-      <h1 className="font-display text-3xl text-parchment">Memory gallery</h1>
-      <p className="mt-2 text-sm text-parchment/50">Click a memory to revisit it.</p>
+    <div className="page-background gallery-bg flex items-center justify-center">
+      <p className="text-2xl text-white">Loading Memories...</p>
+    </div>
+  );
+  }
+  return (
+    <div className="page-background gallery-bg page-enter">
 
-      <div className="mt-10 columns-2 gap-4 sm:columns-3 [&>*]:mb-4">
-        {galleryMemories.map((m, i) => (
-          <motion.button
-            key={m.id}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.06 }}
-            onClick={() => setSelected(m)}
-            className={`block w-full break-inside-avoid rounded-2xl bg-gradient-to-br p-6 text-left ${
-              i % 3 === 0 ? 'h-56' : i % 3 === 1 ? 'h-40' : 'h-64'
-            } from-indigo/40 to-void-light border border-white/10 transition-transform hover:scale-[1.02]`}
-          >
-            <span className="text-2xl">{moodEmojiScale[4]}</span>
-            <p className="mt-auto pt-8 font-display text-parchment">{m.caption}</p>
-          </motion.button>
-        ))}
+      <div className="mx-auto max-w-7xl px-6 py-16">
+
+        {/* Header */}
+
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-14 text-center"
+        >
+
+          <p className="uppercase tracking-[0.35em] text-[#E7C88A]">
+
+            Echoes of Tomorrow
+
+          </p>
+
+          <h1 className="mt-3 font-display text-6xl text-white">
+
+            Memory Archive
+
+          </h1>
+
+          <p className="mx-auto mt-5 max-w-3xl text-xl leading-8 text-[#F7E9D0]">
+
+            Every sealed letter tells the story of who you once were, waiting patiently for the right moment to be remembered.
+
+          </p>
+
+        </motion.div>
+
+        {/* Cards */}
+
+        {letters.length === 0 ? (
+
+          <div className="glass-card p-16 text-center">
+
+            <ScrollText
+              size={70}
+              className="mx-auto text-[#E7C88A]"
+            />
+
+            <h2 className="mt-6 font-display text-4xl text-white">
+
+              No Memories Yet
+
+            </h2>
+
+            <p className="mt-4 text-[#F7E9D0]">
+
+              Write your first letter and begin preserving moments that time can never erase.
+
+            </p>
+
+          </div>
+
+        ) : (
+
+          <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-3">
+
+            {letters.map((letter, index) => (
+
+              <motion.button
+
+                key={letter._id}
+
+                initial={{ opacity: 0, y: 20 }}
+
+                animate={{ opacity: 1, y: 0 }}
+
+                transition={{ delay: index * .08 }}
+
+                whileHover={{
+                y: -10,
+                scale: 1.03,
+                }}
+
+                onClick={() => setSelected(letter)}
+
+                className="rounded-[28px] border border-[#D4AF37]/25 bg-[#7B5A45]/85 p-8 text-left shadow-2xl backdrop-blur-md"
+
+              >
+
+                <div className="flex items-center justify-between">
+
+                  <div>
+
+                    <p className="text-xs uppercase tracking-[0.3em] text-[#E7C88A]">
+
+                      Memory
+
+                    </p>
+
+                  </div>
+
+                  {letter.locked ? (
+
+                    <Lock className="text-[#E7C88A]" />
+
+                  ) : (
+
+                    <Unlock className="text-green-300" />
+
+                  )}
+
+                </div>
+
+                <h2 className="mt-6 font-display text-4xl text-white">
+
+                  {letter.title}
+
+                </h2>
+
+                <p className="mt-5 line-clamp-4 leading-8 text-[#F7E9D0]">
+
+                  {letter.locked
+                    ? "Time has not yet unlocked this memory.."
+                    : letter.body}
+
+                </p>
+
+                <div className="mt-8 flex items-center gap-3 border-t border-[#C9A46B]/30 pt-5">
+
+                  <CalendarDays
+                    size={18}
+                    className="text-[#E7C88A]"
+                  />
+
+                  <div>
+                  <p className="text-xs uppercase tracking-widest text-[#E7C88A]">
+                  Opens On
+                  </p>
+
+                  <span className="text-[#F7E9D0]">
+                  {new Date(letter.openDate).toLocaleDateString()}
+                  </span>
+                  </div>
+
+                </div>
+
+              </motion.button>
+
+            ))}
+
+          </div>
+
+        )}
+
       </div>
 
+      {/* Modal */}
+
       <AnimatePresence>
+
         {selected && (
+
           <motion.div
+
             initial={{ opacity: 0 }}
+
             animate={{ opacity: 1 }}
+
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-void/80 backdrop-blur-sm px-6"
+
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-6"
+
             onClick={() => setSelected(null)}
+
           >
+
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
+
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-md rounded-2xl border border-white/10 bg-void-light p-6"
+
+              className="glass-card max-w-2xl rounded-[30px] p-10"
+
             >
-              <div className="flex items-start justify-between">
-                <h2 className="font-display text-xl text-parchment">{selected.caption}</h2>
-                <button onClick={() => setSelected(null)} className="text-parchment/50">
-                  <X size={18} />
-                </button>
-              </div>
-              <p className="mt-2 text-xs text-parchment/40">
-                {new Date(selected.date).toLocaleDateString('en-US', {
-                  month: 'long',
-                  day: 'numeric',
-                  year: 'numeric',
-                })}
+
+              <h2 className="font-display text-5xl text-white">
+
+                {selected.title}
+
+              </h2>
+
+              <p className="mt-8 whitespace-pre-wrap leading-9 text-[#F7E9D0]">
+
+                {selected.locked
+                  ? "This letter remains sealed until its chosen moment in time."
+                  : selected.body}
+
               </p>
-              <p className="mt-4 text-sm text-parchment/70">
-                Mood: {selected.mood} {moodEmojiScale[4]}
-              </p>
+
             </motion.div>
+
           </motion.div>
+
         )}
+
       </AnimatePresence>
+
     </div>
   );
 }

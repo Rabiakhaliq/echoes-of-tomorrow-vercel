@@ -1,3 +1,4 @@
+import LoadingScreen from "../components/LoadingScreen";
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Target, Calendar } from 'lucide-react';
@@ -46,9 +47,14 @@ export default function Dashboard() {
       .finally(() => setLoading(false));
   }, [token]);
 
-  if (loading) {
-    return <p className="px-6 py-24 text-center text-parchment/40">Loading your dashboard...</p>;
-  }
+if (loading) {
+    return (
+        <LoadingScreen
+            title="Loading Your Dashboard..."
+            subtitle="Collecting your letters and memories."
+        />
+    );
+}
 
   if (error) {
     return <p className="px-6 py-24 text-center text-red-400">{error}</p>;
@@ -60,122 +66,491 @@ export default function Dashboard() {
     .sort((a, b) => new Date(a.openDate) - new Date(b.openDate))[0];
 
   return (
-    <div className="mx-auto max-w-6xl px-6 py-14">
-      <motion.h1
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="font-display text-3xl text-parchment"
-      >
-        Welcome back, {user?.name}
-      </motion.h1>
-      <p className="mt-1 text-sm text-parchment/50">
-        {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+    <div className="page-background dashboard-bg page-enter">
+      <div className="mx-auto max-w-7xl px-6 py-16">
+
+  <motion.div
+    initial={{ opacity: 0, y: -25 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.6 }}
+    className="mb-12 rounded-3xl bg-[#7B5A45]/75 p-10 backdrop-blur-md border border-[#C9A46B]/30 shadow-2xl"
+  >
+
+    <p className="uppercase tracking-[0.35em] text-[#F5DEB3] text-sm">
+
+      Echoes of Tomorrow
+
+    </p>
+
+    <h1 className="mt-3 font-display text-5xl md:text-6xl text-white">
+      Welcome Back,
+    <span className="text-[#E7C88A]">
+    {" "}
+    {user?.name}
+    </span>
+    </h1>
+
+<div className="mt-6 h-[2px] w-28 rounded-full bg-gradient-to-r from-transparent via-[#D4AF37] to-transparent"></div>
+
+
+ <p className="mt-5 max-w-3xl text-lg leading-8 text-[#F6E7D0]">
+
+  Write today for the person you'll become tomorrow.
+
+  <br />
+
+  Seal your memories, your dreams, and your emotions inside a timeless archive that only time can unlock.
+
+</p>
+
+    <div className="mt-8 inline-flex rounded-full bg-[#5E4634]/60 px-5 py-3 text-[#F5E6D0]">
+
+      {new Date().toLocaleDateString("en-US", {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      })}
+
+    </div>
+
+  </motion.div>
+
+      <motion.div
+
+initial={{opacity:0,y:20}}
+
+animate={{opacity:1,y:0}}
+
+transition={{delay:.2}}
+
+className="grid gap-6 lg:grid-cols-3"
+
+>
+
+<div className="glass-card p-6">
+
+<h2 className="font-display text-2xl text-white">
+
+📜 Letters Waiting
+
+</h2>
+
+<div className="mt-5">
+
+<StatCard
+
+label="Sealed Letters"
+
+value={sealedCount}
+
+icon={Mail}
+
+delay={0.05}
+
+/>
+
+</div>
+
+</div>
+
+
+
+<div className="glass-card p-6">
+
+<h2 className="font-display text-2xl text-white">
+
+⏳ Next Memory
+
+</h2>
+
+<div className="mt-5">
+
+<CountdownCard
+
+letter={nextLetter}
+
+/>
+
+</div>
+
+</div>
+
+
+
+<div className="glass-card p-6">
+
+<h2 className="font-display text-2xl text-white">
+
+🎯 Your Goals
+
+</h2>
+
+<div className="mt-5">
+
+<StatCard
+
+label="Goals"
+
+value={goals.length}
+
+icon={Target}
+
+delay={0.15}
+
+/>
+
+</div>
+
+</div>
+
+</motion.div>
+
+      <div className="mt-10 grid gap-8 lg:grid-cols-5">
+
+  {/* ================= Mood Journey ================= */}
+
+  <motion.div
+    initial={{ opacity: 0, x: -20 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ delay: .3 }}
+    className="glass-card lg:col-span-3 p-8"
+  >
+
+    <div className="flex items-center justify-between">
+
+      <div>
+
+        <p className="uppercase tracking-[0.25em] text-sm text-[#E7C88A]">
+
+          Emotional Journey
+
+        </p>
+
+        <h2 className="mt-2 font-display text-4xl text-white">
+
+          Mood Timeline
+
+        </h2>
+
+      </div>
+
+      {moodHistory.length > 0 && (
+
+        <div className="text-5xl">
+
+          {moodEmojiScale[moodHistory.at(-1).mood]}
+
+        </div>
+
+      )}
+
+    </div>
+
+    <div className="mt-8 h-64">
+
+      {moodHistory.length === 0 ? (
+
+        <div className="flex h-full items-center justify-center rounded-2xl border border-dashed border-[#C9A46B]/40">
+
+          <p className="text-lg text-[#F7E9D0]">
+
+            No emotions have been recorded yet.
+            <br />
+            Your mood timeline will slowly come alive as you continue writing letters.
+
+          </p>
+
+        </div>
+
+      ) : (
+
+        <ResponsiveContainer width="100%" height="100%">
+
+          <LineChart data={moodHistory}>
+
+            <XAxis
+              dataKey="month"
+              axisLine={false}
+              tickLine={false}
+              tick={{
+                fill: "#F7E9D0",
+                fontSize: 13,
+              }}
+            />
+
+            <Tooltip content={<MoodTooltip />} />
+
+            <Line
+              type="monotone"
+              dataKey="mood"
+              stroke="#E7C88A"
+              strokeWidth={4}
+              dot={{
+                fill: "#D4AF37",
+                r: 6,
+              }}
+              activeDot={{
+                r: 8,
+                fill: "#FFF5D6",
+              }}
+            />
+
+          </LineChart>
+
+        </ResponsiveContainer>
+
+      )}
+
+    </div>
+
+  </motion.div>
+
+  {/* ================= Goals ================= */}
+
+  <motion.div
+    initial={{ opacity: 0, x: 20 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ delay: .45 }}
+    className="glass-card lg:col-span-2 p-8"
+  >
+
+    <p className="uppercase tracking-[0.25em] text-sm text-[#E7C88A]">
+
+      Dreams
+
+    </p>
+
+    <h2 className="mt-2 font-display text-4xl text-white">
+
+      Goals
+
+    </h2>
+
+    {goals.length === 0 ? (
+
+      <div className="mt-8 rounded-2xl border border-dashed border-[#C9A46B]/40 p-8 text-center">
+
+        <p className="text-[#F7E9D0]">
+
+          🌱
+
+        </p>
+
+        <p className="mt-3 text-lg leading-8 text-[#F7E9D0]">
+        Dreams become reality only when they are written down.
+        <br />
+        Create your first goal to begin tracking your future.
+        </p>
+
+      </div>
+
+    ) : (
+
+      <div className="mt-8 space-y-6">
+
+        {goals.map((goal) => (
+
+          <div key={goal._id}>
+
+            <div className="flex justify-between">
+
+              <span className="font-medium text-white">
+
+                {goal.text}
+
+              </span>
+
+              <span className="text-[#E7C88A]">
+
+                {goal.progress}%
+
+              </span>
+
+            </div>
+
+            <div className="mt-3 h-3 overflow-hidden rounded-full bg-white/10">
+
+              <motion.div
+
+                initial={{ width: 0 }}
+
+                animate={{
+                  width: `${goal.progress}%`,
+                }}
+
+                transition={{
+                  duration: 1,
+                }}
+
+                className="h-full rounded-full bg-gradient-to-r from-[#D4AF37] to-[#8B5E3C]"
+
+              />
+
+            </div>
+
+          </div>
+
+        ))}
+
+      </div>
+
+    )}
+
+  </motion.div>
+
+</div>
+
+      <motion.div
+  initial={{ opacity: 0, y: 25 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ delay: 0.55 }}
+  className="glass-card mt-10 p-8"
+>
+
+  <div className="flex items-center justify-between">
+
+    <div>
+
+      <p className="uppercase tracking-[0.25em] text-sm text-[#E7C88A]">
+
+        Time Capsule Collection
+
       </p>
 
-      <div className="mt-8 grid gap-5 sm:grid-cols-3">
-        <StatCard label="Letters waiting" value={sealedCount} icon={Mail} delay={0.05} />
-        <CountdownCard letter={nextLetter} />
-        <StatCard label="Goals in progress" value={goals.length} icon={Target} delay={0.15} />
+      <h2 className="mt-2 font-display text-4xl text-white">
+
+        Your Letters
+
+      </h2>
+
+    </div>
+
+    <Calendar
+      size={34}
+      className="text-[#E7C88A]"
+    />
+
+  </div>
+
+  {letters.length === 0 ? (
+
+    <div className="mt-10 rounded-2xl border border-dashed border-[#C9A46B]/40 p-12 text-center">
+
+      <div className="text-6xl">
+
+        📜
+
       </div>
 
-      <div className="mt-6 grid gap-5 lg:grid-cols-5">
-        <div className="rounded-2xl border border-white/10 bg-void-light/50 p-6 lg:col-span-3">
+      <h3 className="mt-5 font-display text-3xl text-white">
+
+        Your journey through time begins with a single letter.
+
+      </h3>
+
+      <p className="mt-3 text-lg text-[#F7E9D0]">
+
+        Write your first memory and let tomorrow preserve it forever.
+
+      </p>
+
+    </div>
+
+  ) : (
+
+    <div className="mt-10 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+
+      {letters.map((letter, index) => (
+
+        <motion.div
+
+          key={letter._id}
+
+          initial={{ opacity: 0, y: 20 }}
+
+          animate={{ opacity: 1, y: 0 }}
+
+          transition={{ delay: index * 0.08 }}
+
+          whileHover={{
+          y: -10,
+          scale: 1.03,
+          }}
+
+          className="glass-card p-6"
+
+        >
+
           <div className="flex items-center justify-between">
-            <h2 className="font-display text-lg text-parchment">Your mood this year</h2>
-            {moodHistory.length > 0 && (
-              <span className="text-2xl">{moodEmojiScale[moodHistory.at(-1).mood]}</span>
-            )}
-          </div>
-          <div className="mt-4 h-40">
-            {moodHistory.length === 0 ? (
-              <p className="flex h-full items-center justify-center text-sm text-parchment/40">
-                No mood entries yet — log one when you write a letter.
-              </p>
-            ) : (
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={moodHistory}>
-                  <XAxis
-                    dataKey="month"
-                    stroke="#F3EFE6"
-                    strokeOpacity={0.3}
-                    tick={{ fill: '#F3EFE6', opacity: 0.5, fontSize: 12 }}
-                    axisLine={false}
-                    tickLine={false}
-                  />
-                  <Tooltip content={<MoodTooltip />} />
-                  <Line
-                    type="monotone"
-                    dataKey="mood"
-                    stroke="#64DFDF"
-                    strokeWidth={2}
-                    dot={{ fill: '#5E60CE', r: 4 }}
-                    activeDot={{ r: 6 }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            )}
-          </div>
-        </div>
 
-        <div className="rounded-2xl border border-white/10 bg-void-light/50 p-6 lg:col-span-2">
-          <h2 className="font-display text-lg text-parchment">Goals</h2>
-          {goals.length === 0 ? (
-            <p className="mt-4 text-sm text-parchment/40">No goals yet.</p>
-          ) : (
-            <div className="mt-4 space-y-4">
-              {goals.map((g) => (
-                <div key={g._id}>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-parchment/80">{g.text}</span>
-                    <span className="text-parchment/40">{g.progress}%</span>
-                  </div>
-                  <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
-                    <div
-                      className="h-full rounded-full bg-gradient-to-r from-indigo to-aqua"
-                      style={{ width: `${g.progress}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+            <span
 
-      <div className="mt-6 rounded-2xl border border-white/10 bg-void-light/50 p-6">
-        <div className="flex items-center gap-2">
-          <Calendar size={16} className="text-gold" />
-          <h2 className="font-display text-lg text-parchment">Your letters</h2>
-        </div>
-        {letters.length === 0 ? (
-          <p className="mt-4 text-sm text-parchment/40">
-            No letters yet. Head to "Write a Letter" to seal your first one.
+              className={`rounded-full px-4 py-1 text-xs font-semibold uppercase tracking-wider ${
+                letter.status === "sealed"
+                  ? "bg-[#D4AF37] text-black"
+                  : "bg-green-700 text-white"
+              }`}
+
+            >
+
+              {letter.status === "sealed"
+                ? "🔒 Sealed"
+                : "📖 Open"}
+
+            </span>
+
+          </div>
+
+          <h3 className="mt-6 font-display text-3xl text-white">
+
+            {letter.title}
+
+          </h3>
+
+          <p className="mt-4 min-h-[70px] leading-7 text-[#F7E9D0]">
+
+            {letter.locked
+              ? "This memory is safely sealed and cannot be opened until its chosen date."
+              : letter.body}
+
           </p>
-        ) : (
-          <div className="mt-4 grid gap-3 sm:grid-cols-3">
-            {letters.map((l) => (
-              <div key={l._id} className="rounded-xl border border-white/10 bg-void/60 p-4">
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`rounded-full px-2 py-0.5 text-[10px] uppercase tracking-wide ${
-                      l.status === 'sealed' ? 'bg-indigo/30 text-indigo-soft' : 'bg-gold/20 text-gold'
-                    }`}
-                  >
-                    {l.status}
-                  </span>
-                </div>
-                <h3 className="mt-2 font-display text-parchment">{l.title}</h3>
-                <p className="mt-1 line-clamp-2 text-xs text-parchment/50">
-                  {l.locked ? 'This letter is sealed until its open date.' : l.body}
-                </p>
-                <p className="mt-3 text-[11px] text-parchment/40">
-                  Opens {new Date(l.openDate).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
-                </p>
-              </div>
-            ))}
+
+          <div className="mt-8 border-t border-[#C9A46B]/20 pt-5">
+
+            <p className="text-sm text-[#E7C88A]">
+
+              Opens on
+
+            </p>
+
+            <p className="mt-1 text-white">
+
+              {new Date(letter.openDate).toLocaleDateString(
+                "en-US",
+                {
+                  weekday: "long",
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                }
+              )}
+
+            </p>
+
           </div>
-        )}
-      </div>
+
+        </motion.div>
+
+      ))}
+
+    </div>
+
+  )}
+
+</motion.div>
+
+</div>
     </div>
   );
 }

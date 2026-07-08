@@ -1,46 +1,955 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Lora:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
+/* ===================================================
+   ECHOES OF TOMORROW
+   Premium Vintage Theme
+=================================================== */
+
 @theme {
-  /* deep purple night theme */
-  --color-void: #180B2E;        /* page background — deep purple-black */
-  --color-void-light: #2B1650;  /* card background — rich purple */
-  --color-indigo: #8B5CF6;      /* vivid violet — primary accent */
-  --color-indigo-soft: #A78BFA; /* lighter violet — secondary accent */
-  --color-aqua: #64DFDF;        /* teal — pops against the purple */
-  --color-gold: #E8B94D;        /* warm gold — wax seal / highlight only */
-  --color-parchment: #F3EFE6;   /* off-white — main text color */
 
-  --font-display: 'Fraunces', serif;
-  --font-sans: 'Outfit', sans-serif;
+  /* Backgrounds */
+
+  --color-void: #F6F0E4;
+  --color-void-light: #8A6848;
+
+  /* Browns */
+
+  --color-indigo: #8B5E3C;
+  --color-indigo-soft: #B7895A;
+
+  /* Gold */
+
+  --color-aqua: #C6A46A;
+  --color-gold: #D4AF37;
+
+  /* Text */
+
+  --color-parchment: #2D1B10;
+
+  /* Fonts */
+
+  --font-display: "Cormorant Garamond", serif;
+  --font-sans: "Lora", serif;
 }
 
-html {
-  scroll-behavior: smooth;
+/* ===================================================
+   GLOBAL
+=================================================== */
+
+*,
+*::before,
+*::after{
+
+    box-sizing:border-box;
+
 }
 
-body {
-  background-color: var(--color-void);
-  color: var(--color-parchment);
-  font-family: var(--font-sans);
-  -webkit-font-smoothing: antialiased;
+html{
+
+    scroll-behavior:smooth;
+
 }
 
-::selection {
-  background: var(--color-gold);
-  color: var(--color-void);
+body{
+
+    margin:0;
+
+    min-height:100vh;
+
+    background:var(--color-void);
+
+    color:var(--color-parchment);
+
+    font-family:var(--font-sans);
+
+    -webkit-font-smoothing:antialiased;
+
+    text-rendering:optimizeLegibility;
+
+    overflow-x:hidden;
+
 }
 
-/* thin scrollbar to match the theme */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: var(--color-void); }
-::-webkit-scrollbar-thumb { background: var(--color-indigo); border-radius: 8px; }
+img{
 
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+    max-width:100%;
+
+    display:block;
+
+}
+
+button{
+
+    cursor:pointer;
+
+}
+
+::selection{
+
+    background:#D4AF37;
+
+    color:white;
+
+}
+
+/* ===================================================
+   SCROLLBAR
+=================================================== */
+
+::-webkit-scrollbar{
+
+    width:8px;
+
+}
+
+::-webkit-scrollbar-track{
+
+    background:#EFE6D7;
+
+}
+
+::-webkit-scrollbar-thumb{
+
+    background:linear-gradient(
+        180deg,
+        #8B5E3C,
+        #C6A46A
+    );
+
+    border-radius:999px;
+
+}
+
+::-webkit-scrollbar-thumb:hover{
+
+    background:linear-gradient(
+        180deg,
+        #6F4E37,
+        #D4AF37
+    );
+
+}
+
+/* ===================================================
+   PAGE BACKGROUNDS
+=================================================== */
+
+.page-background{
+
+    position:relative;
+
+    width:100%;
+
+    min-height:100vh;
+
+    background-size:cover;
+
+    background-position:center;
+
+    background-repeat:no-repeat;
+
+    background-attachment:fixed;
+
+    overflow:hidden;
+
+}
+
+.page-background::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    backdrop-filter:blur(1.8px);
+
+    z-index:0;
+
+}
+
+.page-background>*{
+
+    position:relative;
+
+    z-index:1;
+
+}
+
+/* Landing */
+
+.landing-bg{
+
+    background-image:url("./assets/Background/broken-clock.jpeg");
+
+}
+
+.landing-bg::before{
+
+    background:rgba(22,14,8,.58);
+
+}
+
+/* Login */
+
+.login-bg{
+
+    background-image:url("./assets/Background/broken-clock.jpeg");
+
+}
+
+.login-bg::before{
+
+    background:rgba(22,14,8,.58);
+
+}
+
+/* Register */
+
+.register-bg{
+
+    background-image:url("./assets/Background/broken-clock.jpeg");
+
+}
+
+.register-bg::before{
+
+    background:rgba(22,14,8,.58);
+
+}
+
+/* Dashboard */
+
+.dashboard-bg{
+
+    background-image:url("./assets/Background/vintage-paper.jpeg");
+
+}
+
+.dashboard-bg::before{
+
+    background:rgba(250,245,236,.28);
+
+}
+
+/* Letter */
+
+.letter-bg{
+
+    background-image:url("./assets/Background/vintage-paper.jpeg");
+
+}
+
+.letter-bg::before{
+
+    background:rgba(250,245,236,.28);
+
+}
+
+/* Gallery */
+
+.gallery-bg{
+
+    background-image:url("./assets/Background/memory-gallery.jpeg");
+
+}
+
+.gallery-bg::before{
+
+    background:rgba(20,12,6,.45);
+
+}
+
+/* Timeline */
+
+.timeline-bg{
+
+    background-image:url("./assets/Background/pocket-watch.jpeg");
+
+}
+
+.timeline-bg::before{
+
+    background:rgba(18,12,6,.48);
+
+}
+
+/* ===================================================
+   LAYOUT HELPERS
+=================================================== */
+
+.section{
+
+    width:min(1200px,92%);
+
+    margin-inline:auto;
+
+}
+
+.page-title{
+
+    font-family:var(--font-display);
+
+    color:white;
+
+    font-size:clamp(2.4rem,5vw,4.2rem);
+
+    text-align:center;
+
+}
+
+.page-subtitle{
+
+    color:#F7E9D0;
+
+    text-align:center;
+
+    max-width:760px;
+
+    margin-inline:auto;
+
+    line-height:1.8;
+
+}
+
+/* ===================================================
+   PREMIUM GLASS CARD
+=================================================== */
+
+.glass-card{
+
+    position:relative;
+
+    overflow:hidden;
+
+    background:rgba(110,78,55,.72);
+
+    backdrop-filter:blur(14px);
+
+    -webkit-backdrop-filter:blur(14px);
+
+    border:1px solid rgba(255,236,205,.22);
+
+    border-radius:24px;
+
+    box-shadow:
+        0 10px 35px rgba(0,0,0,.22);
+
+    transition:
+        transform .35s ease,
+        box-shadow .35s ease,
+        border-color .35s ease;
+
+}
+
+.glass-card::before{
+
+    content:"";
+
+    position:absolute;
+
+    inset:0;
+
+    background:linear-gradient(
+        180deg,
+        rgba(255,255,255,.05),
+        transparent
+    );
+
+    pointer-events:none;
+
+}
+
+.glass-card::after{
+
+    content:"";
+
+    position:absolute;
+
+    top:-120%;
+
+    left:-70%;
+
+    width:40%;
+
+    height:320%;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.08),
+        transparent
+    );
+
+    transform:rotate(24deg);
+
+    transition:left .9s;
+
+}
+
+.glass-card:hover{
+
+    transform:translateY(-7px) scale(1.01);
+
+    border-color:rgba(212,175,55,.45);
+
+    box-shadow:
+        0 25px 50px rgba(0,0,0,.30);
+
+}
+
+.glass-card:hover::after{
+
+    left:140%;
+
+}
+
+/* ===================================================
+   BUTTONS
+=================================================== */
+
+.primary-button{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:.65rem;
+
+    padding:14px 34px;
+
+    border-radius:14px;
+
+    border:2px solid #D4AF37;
+
+    background:#8B5E3C;
+
+    color:white;
+
+    font-weight:600;
+
+    letter-spacing:.02em;
+
+    transition:all .3s ease;
+
+}
+
+.primary-button:hover{
+
+    background:#6F4E37;
+
+    border-color:#E7C88A;
+
+    transform:translateY(-4px) scale(1.02);
+
+    box-shadow:
+        0 18px 35px rgba(0,0,0,.30);
+
+}
+
+.primary-button:active{
+
+    transform:translateY(-1px);
+
+}
+
+.secondary-button{
+
+    display:inline-flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:.5rem;
+
+    padding:14px 30px;
+
+    border-radius:14px;
+
+    background:rgba(255,255,255,.08);
+
+    color:white;
+
+    border:1px solid rgba(212,175,55,.25);
+
+    backdrop-filter:blur(8px);
+
+    transition:.3s;
+
+}
+
+.secondary-button:hover{
+
+    background:rgba(255,255,255,.15);
+
+    border-color:#D4AF37;
+
+}
+
+/* ===================================================
+   FORM INPUTS
+=================================================== */
+
+input,
+textarea,
+select{
+
+    width:100%;
+
+    transition:.3s;
+
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+
+    outline:none;
+
+    border-color:#D4AF37;
+
+    box-shadow:
+        0 0 0 4px rgba(212,175,55,.18);
+
+}
+
+/* ===================================================
+   JOURNAL TEXTAREA
+=================================================== */
+
+.journal{
+
+    background:
+
+        repeating-linear-gradient(
+
+            transparent,
+
+            transparent 33px,
+
+            rgba(70,45,18,.08) 34px
+
+        ),
+
+        rgba(255,249,240,.35);
+
+    border:2px solid rgba(139,94,60,.20);
+
+    border-radius:22px;
+
+    color:#2D1B10;
+
+    line-height:34px;
+
+    padding:24px;
+
+    font-size:18px;
+
+    backdrop-filter:blur(5px);
+
+    resize:vertical;
+
+}
+
+.journal::placeholder{
+
+    color:#6A4A31;
+
+}
+
+/* ===================================================
+   MOOD BUTTONS
+=================================================== */
+
+.mood-pill{
+
+    border:2px solid #8B5E3C;
+
+    border-radius:999px;
+
+    background:white;
+
+    color:#5A3C25;
+
+    padding:9px 20px;
+
+    transition:.3s;
+
+    cursor:pointer;
+
+    font-weight:500;
+
+}
+
+.mood-pill:hover{
+
+    background:#E7D4BC;
+
+    transform:scale(1.05);
+
+}
+
+.mood-pill.active{
+
+    background:#8B5E3C;
+
+    color:white;
+
+    border-color:#D4AF37;
+
+    box-shadow:
+        0 6px 18px rgba(0,0,0,.18);
+
+}
+
+/* ===================================================
+   RANGE SLIDER
+=================================================== */
+
+input[type="range"]{
+
+    accent-color:#8B5E3C;
+
+    cursor:pointer;
+
+}
+
+/* ===================================================
+   LABELS
+=================================================== */
+
+label{
+
+    color:#F7E9D0;
+
+    font-weight:500;
+
+    margin-bottom:6px;
+
+    display:block;
+
+}
+
+/* ===================================================
+   PLACEHOLDERS
+=================================================== */
+
+input::placeholder,
+textarea::placeholder{
+
+    color:#8A6A50;
+
+}
+
+/* ===================================================
+   DISABLED BUTTONS
+=================================================== */
+
+button:disabled{
+
+    opacity:.6;
+
+    cursor:not-allowed;
+
+}
+/* ===================================================
+   PAGE ANIMATIONS
+=================================================== */
+
+.page-enter{
+
+    animation:pageFade .55s ease;
+
+}
+
+@keyframes pageFade{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(20px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+.fade-up{
+
+    animation:fadeUp .7s ease;
+
+}
+
+@keyframes fadeUp{
+
+    from{
+
+        opacity:0;
+
+        transform:translateY(24px);
+
+    }
+
+    to{
+
+        opacity:1;
+
+        transform:translateY(0);
+
+    }
+
+}
+
+/* ===================================================
+   FLOATING ANIMATION
+=================================================== */
+
+@keyframes floating{
+
+    0%{
+
+        transform:translateY(0px);
+
+    }
+
+    50%{
+
+        transform:translateY(-10px);
+
+    }
+
+    100%{
+
+        transform:translateY(0px);
+
+    }
+
+}
+
+.floating{
+
+    animation:floating 4s ease-in-out infinite;
+
+}
+
+/* ===================================================
+   GOLD GLOW
+=================================================== */
+
+@keyframes goldGlow{
+
+    0%{
+
+        box-shadow:0 0 0 rgba(212,175,55,0);
+
+    }
+
+    50%{
+
+        box-shadow:0 0 28px rgba(212,175,55,.45);
+
+    }
+
+    100%{
+
+        box-shadow:0 0 0 rgba(212,175,55,0);
+
+    }
+
+}
+
+.gold-glow{
+
+    animation:goldGlow 3s ease-in-out infinite;
+
+}
+
+/* ===================================================
+   LOADING DOTS
+=================================================== */
+
+.loading-dot{
+
+    width:10px;
+
+    height:10px;
+
+    border-radius:50%;
+
+    background:#D4AF37;
+
+    animation:loadingBounce 1.2s infinite ease-in-out;
+
+}
+
+.loading-dot:nth-child(2){
+
+    animation-delay:.2s;
+
+}
+
+.loading-dot:nth-child(3){
+
+    animation-delay:.4s;
+
+}
+
+@keyframes loadingBounce{
+
+    0%{
+
+        transform:translateY(0);
+
+        opacity:.5;
+
+    }
+
+    50%{
+
+        transform:translateY(-10px);
+
+        opacity:1;
+
+    }
+
+    100%{
+
+        transform:translateY(0);
+
+        opacity:.5;
+
+    }
+
+}
+
+/* ===================================================
+   IMAGE EFFECTS
+=================================================== */
+
+img{
+
+    transition:transform .45s ease;
+
+}
+
+img:hover{
+
+    transform:scale(1.02);
+
+}
+
+/* ===================================================
+   LINK EFFECTS
+=================================================== */
+
+a{
+
+    transition:.3s;
+
+    text-decoration:none;
+
+}
+
+a:hover{
+
+    opacity:.95;
+
+}
+
+/* ===================================================
+   TEXT SELECTION
+=================================================== */
+
+::selection{
+
+    background:#D4AF37;
+
+    color:white;
+
+}
+
+/* ===================================================
+   RESPONSIVE
+=================================================== */
+
+@media(max-width:1024px){
+
+    .page-title{
+
+        font-size:3rem;
+
+    }
+
+}
+
+@media(max-width:768px){
+
+    .page-title{
+
+        font-size:2.5rem;
+
+    }
+
+    .glass-card{
+
+        padding:1.4rem;
+
+    }
+
+    .primary-button{
+
+        width:100%;
+
+        justify-content:center;
+
+    }
+
+}
+
+@media(max-width:480px){
+
+    .page-title{
+
+        font-size:2rem;
+
+    }
+
+    .page-subtitle{
+
+        font-size:.95rem;
+
+    }
+
+}
+
+/* ===================================================
+   REDUCED MOTION
+=================================================== */
+
+@media(prefers-reduced-motion:reduce){
+
+*,
+*::before,
+*::after{
+
+animation:none!important;
+
+transition:none!important;
+
+scroll-behavior:auto!important;
+
+}
+
 }

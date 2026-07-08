@@ -1,75 +1,155 @@
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import { Clock3, Feather, Sparkles } from "lucide-react";
 
 export default function Landing() {
   return (
-    <div className="mx-auto max-w-4xl px-6 py-24 text-center">
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6 }}
-        className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs uppercase tracking-[0.2em] text-aqua"
-      >
-        <Sparkles size={12} />
-        A letter, sealed in time
-      </motion.p>
+    <div className="page-background landing-bg">
 
-      <motion.h1
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.1 }}
-        className="font-display text-4xl leading-tight text-parchment sm:text-6xl"
-      >
-        Every memory deserves
-        <br />
-        <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-indigo-soft to-aqua">
-          another chance to be remembered.
-        </span>
-      </motion.h1>
+      <div className="mx-auto flex min-h-screen max-w-7xl items-center justify-center px-6 py-16">
 
-      <motion.p
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.25 }}
-        className="mx-auto mt-6 max-w-xl text-parchment/60"
-      >
-        Write to your future self. Seal it with photos, voice, and mood. Let it
-        arrive years from now, alongside an AI reflection on how far you've come.
-      </motion.p>
-
-      <motion.div
-        initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.7, delay: 0.4 }}
-        className="mt-10 flex justify-center"
-      >
-        <Link
-          to="/write"
-          className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo to-aqua px-7 py-3.5 font-medium text-void shadow-lg shadow-indigo/20 transition-transform hover:scale-105"
+        <motion.div
+          initial={{ opacity: 0, y: 35 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          className="glass-card max-w-4xl rounded-[32px] p-12 text-center"
         >
-          Create your first time capsule
-          <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
-        </Link>
-      </motion.div>
 
-      {/* scrolling years — the "traveling through time" moment */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 0.7 }}
-        className="mt-24 flex items-center justify-center gap-6 overflow-hidden font-display text-2xl text-parchment/20 sm:text-4xl"
-      >
-        {['2026', '2028', '2030', '2035', '2040'].map((year, i) => (
-          <motion.span
-            key={year}
-            animate={{ opacity: [0.15, 1, 0.15] }}
-            transition={{ duration: 4, repeat: Infinity, delay: i * 0.8, ease: 'easeInOut' }}
+          {/* Small Heading */}
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: .2 }}
+            className="inline-flex items-center gap-2 rounded-full border border-[#D4AF37]/40 bg-[#5E4634]/50 px-5 py-2"
           >
-            {year}
-          </motion.span>
-        ))}
-      </motion.div>
+
+            <Clock3
+              size={18}
+              className="text-[#E7C88A]"
+            />
+
+            <p className="uppercase tracking-[0.35em] text-xs text-[#F7E9D0]">
+
+              Echoes of Tomorrow
+
+            </p>
+
+          </motion.div>
+
+          {/* Title */}
+
+          <motion.h1
+            initial={{ opacity: 0, y: 25 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: .35 }}
+            className="mt-8 font-display text-6xl leading-tight text-white md:text-7xl"
+          >
+
+            Write to the
+
+            <span className="block text-[#E7C88A]">
+
+              Future You
+
+            </span>
+
+          </motion.h1>
+
+          {/* Subtitle */}
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: .5 }}
+            className="mx-auto mt-8 max-w-3xl text-xl leading-9 text-[#F7E9D0]"
+          >
+
+            Capture today's thoughts,
+
+            dreams and emotions in beautifully sealed letters.
+
+            Time will protect your memories until the day
+
+            you choose to read them again.
+
+          </motion.p>
+
+          {/* Quote */}
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: .75 }}
+            className="mx-auto mt-12 max-w-2xl rounded-2xl border border-[#C9A46B]/30 bg-[#7B5A45]/40 p-6"
+          >
+
+            <Sparkles
+              className="mx-auto mb-4 text-[#E7C88A]"
+              size={26}
+            />
+
+            <p className="italic text-[#F8EEDB] leading-8">
+
+              "The letters you write today become
+              the memories that guide tomorrow."
+
+            </p>
+
+          </motion.div>
+
+          {/* Buttons */}
+
+          <motion.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: .9 }}
+            className="mt-14 flex flex-col items-center justify-center gap-5 sm:flex-row"
+          >
+
+            <Link
+              to="/register"
+              className="primary-button flex items-center gap-3"
+            >
+
+              <Feather size={18} />
+
+              Begin Your Journey
+
+            </Link>
+
+            <Link
+              to="/login"
+              className="rounded-xl border border-[#C9A46B]/40 bg-white/10 px-8 py-4 font-medium text-white backdrop-blur-md transition hover:bg-white/20"
+            >
+
+              Log In
+
+            </Link>
+
+          </motion.div>
+
+          {/* Bottom Text */}
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.2 }}
+            className="mt-16"
+          >
+
+            <p className="text-sm tracking-widest text-[#E7C88A]">
+
+              Preserve • Reflect • Grow
+
+            </p>
+
+          </motion.div>
+
+        </motion.div>
+
+      </div>
+
     </div>
   );
 }

@@ -14,6 +14,8 @@ async function start() {
 }
 
 start().catch((err) => {
-  console.error('Failed to start local API server:', err.message);
+  console.error("===== FULL ERROR =====");
+  console.error(err);
+  console.error("======================");
   process.exit(1);
 });

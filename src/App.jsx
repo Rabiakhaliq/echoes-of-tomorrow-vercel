@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import StarField from './components/StarField';
 import Navbar from './components/Navbar';
-import AmbientSound from './components/AmbientSound';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './context/AuthContext';
 import Landing from './pages/Landing';
@@ -18,7 +17,6 @@ export default function App() {
       <div className="min-h-screen">
         <StarField />
         <Navbar />
-        <AmbientSound />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
